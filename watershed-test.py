@@ -1,9 +1,12 @@
 import cv2
 import numpy as np
+from matplotlib import cm
 
 # Inputs
 
-img = cv2.imread('test.png')
+# TO DO: Change the way images are loaded
+
+img = cv2.imread('img/test.jpg')
 img_copy = np.copy(img)
 
 marker_image = np.zeros(img.shape[:2],dtype=np.int32)
@@ -11,7 +14,6 @@ segments = np.zeros(img.shape,dtype=np.uint8) # Empty
 
 n_markers = 10
 current_marker = 1
-colors = [(31.0, 119.0, 180,0),(255.0, 127.0, 14.0),(44.0, 160.0, 144.0),(214.0, 39.0, 40.0),(148.0, 103.0, 189.0),(140.0, 86.0, 75.0),(227.0, 119.0, 194.0),(127.0, 127.0, 127.0),(188.0, 188.0, 34.0),(23.0, 190.0 ,209.0)]
 
 # Markers
 markers_updated = False
@@ -31,13 +33,21 @@ def mouse_callback(event,x,y,flags,param):
 		
 		markers_updated = True
 
-#cv2.namedWindow('Watershed')
-cv2.setMouseCallback('Watershed', mouse_callback)
+# Colors		
+	
+def create_rgb(i):
+	return tuple(np.array(cm.tab10(i)[:3])*255)
+	
+colors = []
+
+for i in range(10):
+	colors.append(create_rgb(i)) 
 
 while True:
 
 	cv2.imshow('Watershed Segments', segments)
 	cv2.imshow('Original image', img_copy)
+	cv2.setMouseCallback('Original image', mouse_callback)
 	
 	# Close windows
 	
