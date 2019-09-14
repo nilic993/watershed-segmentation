@@ -1,12 +1,19 @@
 import cv2
 import numpy as np
+import os
 from matplotlib import cm
 
 # Inputs
 
-# TO DO: Change the way images are loaded
+img_folder = "./img/"
+res_s_folder = "./res_s/"
 
-img = cv2.imread('img/test.jpg')
+if not os.path.exists(img_folder): # If directories missing
+    os.makedirs(img_folder)
+if not os.path.exists(res_s_folder):
+    os.makedirs(res_s_folder)
+
+img = cv2.imread('img/test.jpg') # Input image
 img_copy = np.copy(img)
 
 marker_image = np.zeros(img.shape[:2],dtype=np.int32)
@@ -18,7 +25,7 @@ current_marker = 1
 # Markers
 markers_updated = False
 
-# Callback function
+# Callback
 
 def mouse_callback(event,x,y,flags,param):
 	global markers_updated
@@ -32,16 +39,19 @@ def mouse_callback(event,x,y,flags,param):
 		cv2.circle(img_copy,(x,y),10,colors[current_marker],-1)
 		
 		markers_updated = True
-
-# Colors		
+		
 	
-def create_rgb(i):
+def create_rgb(i): # Colors
 	return tuple(np.array(cm.tab10(i)[:3])*255)
-	
 colors = []
-
 for i in range(10):
 	colors.append(create_rgb(i)) 
+	
+print("***WATERSHED SEGMENTATION***\n\
+*Assign color with numeric keys (1-9)\n\
+*Click on input image to segment\n\
+*Save segments with S, clear colors with C\n\
+*Press Escape to quit")
 
 while True:
 
@@ -49,14 +59,13 @@ while True:
 	cv2.imshow('Original image', img_copy)
 	cv2.setMouseCallback('Original image', mouse_callback)
 	
-	# Close windows
-	
 	k = cv2.waitKey(1)
 	
 	if k == 27:	# Escape key
 		break
-		
-	# Clearing colors:
+	
+	elif k == ord('s'): # Save segmented image with 's'
+		cv2.imwrite(res_s_folder+'output.jpg', segments)
 	
 	elif k == ord('c'): # Reset colors with 'c'
 		img_copy = img.copy()
