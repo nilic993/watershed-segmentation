@@ -3,6 +3,10 @@ import numpy as np
 import os
 from matplotlib import cm
 
+def add_overlay(base_img, transp_img, transp_weight):
+    added_image = cv2.addWeighted(base_img, 1.0, transp_img, transp_weight, 0)
+    return added_image
+
 # Inputs
 
 img_folder = "./img/"
@@ -16,7 +20,7 @@ if not os.path.exists(res_s_folder):
 while not os.path.exists(img_folder+load_im):
     load_im = input("Enter filename (example: 1.jpg): ")
 
-img = cv2.imread('img/'+load_im) # Input image
+img = cv2.imread(os.path.join(img_folder, load_im)) # Input image
 img_copy = np.copy(img)
 
 marker_image = np.zeros(img.shape[:2],dtype=np.int32)
@@ -54,7 +58,7 @@ for i in range(10):
 print("***WATERSHED SEGMENTATION***\n\
 *Assign color with numeric keys (1-9)\n\
 *Click on input image to segment\n\
-*Save segments with S, clear colors with C\n\
+*Save segments with S, original image + segments with T, clear colors with C\n\
 *Press Escape to quit")
 
 while True:
@@ -70,6 +74,11 @@ while True:
 
     elif k == ord('s'): # Save segmented image with 's'
         cv2.imwrite(res_s_folder+'segmentation_'+str(s)+'_'+load_im, segments)
+        s = s + 1
+
+    elif k == ord('t'): # Save segmented image with 't'
+        transp_img = add_overlay(img, segments, 0.8)
+        cv2.imwrite(res_s_folder+'transp_segmentation_'+str(s)+'_'+load_im, transp_img)
         s = s + 1
 
     elif k == ord('c'): # Reset colors with 'c'
