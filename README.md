@@ -25,7 +25,7 @@ pip3 install -r requirements.txt
 
 -Assign color with numeric keys (1-9), click on the input image to segment
 
--Save segments with S, clear colors with C
+-Save segments with S, save combined transparent image with T, clear colors with C
 
 -Press Escape to quit
 
