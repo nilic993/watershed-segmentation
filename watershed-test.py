@@ -74,11 +74,13 @@ while True:
 
     elif k == ord('s'): # Save segmented image with 's'
         cv2.imwrite(res_s_folder+'segmentation_'+str(s)+'_'+load_im, segments)
+        print("Saving segmented image... "+str(s)+'_'+load_im)
         s = s + 1
 
     elif k == ord('t'): # Save segmented image with 't'
         transp_img = add_overlay(img, segments, 0.8)
         cv2.imwrite(res_s_folder+'transp_segmentation_'+str(s)+'_'+load_im, transp_img)
+        print("Saving transparency image... "+str(s)+'_'+load_im)
         s = s + 1
 
     elif k == ord('c'): # Reset colors with 'c'
